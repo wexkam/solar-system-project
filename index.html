@@ -1,115 +1,418 @@
 <!DOCTYPE html>
- <html lang="ru">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Планеты Солнечной системы</title>
-      <style>
-        body {
-            font-family: Arial, sans-serif;
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Информационное агентство "Ulan-Ude news"</title>
+    <style>
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
         }
 
         header {
-            background-color: #2d3a3f;
+            background: linear-gradient(135deg, #2d3a3f 0%, #1a1f23 100%);
             color: white;
             text-align: center;
-            padding: 20px 0;
+            padding: 40px 20px;
         }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
         }
 
-        th {
-            background-color: #4CAF50;
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
         }
 
-        td img {
-            width: 100px;
-            height: auto;
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #console {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 500px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .observer-list {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .observer-card {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .observer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .observer-card h3 {
+            color: #2d3a3f;
+            margin-bottom: 10px;
+        }
+
+        .observer-card.active {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border: 2px solid #28a745;
+        }
+
+        .observer-card.inactive {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border: 2px solid #dc3545;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .status-active {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-inactive {
+            background: #dc3545;
+            color: white;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box strong {
+            color: #1976D2;
         }
 
         footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #2d3a3f;
+            background: #2d3a3f;
             color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
         }
     </style>
- </head>
- <body>
-     <header>
-         <h1>Планеты Солнечной системы</h1>
-     </header>
-     <table>
-         <thead>
-             <tr>
-                 <th>№</th>
-                 <th>Название</th>
-                 <th>Изображение</th>
-             </tr>
-         </thead>
-         <tbody>
-             <tr>
-                 <td>1</td>
-                 <td>Меркурий</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Mercury_in_color_-_Prockter07_centered.jpg/280px-Mercury_in_color_-_Prockter07_centered.jpg" alt="Меркурий" width="75"></td>
-             </tr>
-             <tr>
-                 <td>2</td>
-                 <td>Венера</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/280px-Venus_from_Mariner_10.jpg" alt="Венера" width="75"></td>
-             </tr>
-             <tr>
-                 <td>3</td>
-                 <td>Земля</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png/330px-Africa_and_Europe_from_a_Million_Miles_Away.png" alt="Земля" width="75"></td>
-             </tr>
-             <tr>
-                 <td>4</td>
-                 <td>Марс</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/274px-Mars_Valles_Marineris_EDIT.jpg" alt="Марс" width="75"></td>
-             </tr>
-             <tr>
-                 <td>5</td>
-                 <td>Юпитер</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg/300px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg" alt="Юпитер" width="75"></td>
-             </tr>
-             <tr>
-                 <td>6</td>
-                 <td>Сатурн</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Saturn_-_April_25_2016_%2837612580000%29.png/300px-Saturn_-_April_25_2016_%2837612580000%29.png" alt="Сатурн" width="75"></td>
-             </tr>
-             <tr>
-                 <td>7</td>
-                 <td>Уран</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Uranus_Voyager2_color_calibrated.png/274px-Uranus_Voyager2_color_calibrated.png" alt="Уран" width="75"></td>
-             </tr>
-             <tr>
-                 <td>8</td>
-                 <td>Нептун</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Neptune_Voyager2_color_calibrated.png/240px-Neptune_Voyager2_color_calibrated.png" alt="Нептун" width="75"></td>
-             </tr>
-         </tbody>
-     </table>
- </body>
- <footer>
-    <small>&copy; 2025 Шойненов А.Б.</small>
- </footer>
- </html>
- </html>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📰 Информационное агентство "Ulan-Ude news"</h1>
+            <p>Система распространения новостей с использованием паттерна Observer</p>
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <h2>📡 Наблюдатели (Подписчики)</h2>
+                <div class="observer-list" id="observerList">
+                    <div class="observer-card inactive" id="card-informpolis">
+                        <h3>📰 Информ полис</h3>
+                        <p>Газета</p>
+                        <span class="status-badge status-inactive">Не подписан</span>
+                    </div>
+                    <div class="observer-card inactive" id="card-arigus">
+                        <h3>📺 Ариг Ус</h3>
+                        <p>Телеканал</p>
+                        <span class="status-badge status-inactive">Не подписан</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚙️ Управление подписками</h2>
+                <div class="controls">
+                    <button class="btn-success" onclick="addInformPolis()">➕ Подписать Информ полис</button>
+                    <button class="btn-success" onclick="addArigUs()">➕ Подписать Ариг Ус</button>
+                    <button class="btn-danger" onclick="removeInformPolis()">➖ Отписать Информ полис</button>
+                    <button class="btn-danger" onclick="removeArigUs()">➖ Отписать Ариг Ус</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📨 Рассылка новостей</h2>
+                <div class="info-box">
+                    <strong>ℹ️ Информация:</strong> При запуске чтения файла, сообщения будут обрабатываться с задержкой в 5 секунд. 
+                    Откройте консоль браузера (F12), чтобы увидеть подробный вывод.
+                </div>
+                <div class="controls">
+                    <button class="btn-primary" id="startBtn" onclick="startReading()">▶️ Начать чтение из файла</button>
+                    <button class="btn-warning" onclick="clearConsole()">🗑️ Очистить консоль</button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💻 Консоль вывода</h2>
+                <div id="console">Ожидание действий пользователя...\n</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Информационное агентство "Ulan-Ude news" | Паттерн Observer</p>
+        </footer>
+    </div>
+
+    <script src="news_agency.js"></script>
+    <script>
+        // Инициализация агентства и наблюдателей
+        const agency = new NewsAgency();
+        const informPolis = new InformPolis();
+        const arigUs = new ArigUs();
+
+        let isInformPolisSubscribed = false;
+        let isArigUsSubscribed = false;
+
+        // Перехват console.log для вывода в элемент на странице
+        const consoleElement = document.getElementById('console');
+        const originalLog = console.log;
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg) : String(arg)
+            ).join(' ');
+            consoleElement.textContent += message + '\n';
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        };
+
+        function updateObserverCard(observer, isSubscribed) {
+            const cardId = observer === informPolis ? 'card-informpolis' : 'card-arigus';
+            const card = document.getElementById(cardId);
+            const badge = card.querySelector('.status-badge');
+
+            if (isSubscribed) {
+                card.classList.remove('inactive');
+                card.classList.add('active');
+                badge.classList.remove('status-inactive');
+                badge.classList.add('status-active');
+                badge.textContent = 'Подписан';
+            } else {
+                card.classList.remove('active');
+                card.classList.add('inactive');
+                badge.classList.remove('status-active');
+                badge.classList.add('status-inactive');
+                badge.textContent = 'Не подписан';
+            }
+        }
+
+        function addInformPolis() {
+            if (!isInformPolisSubscribed) {
+                agency.addObserver(informPolis);
+                isInformPolisSubscribed = true;
+                updateObserverCard(informPolis, true);
+            } else {
+                console.log('Информ полис уже подписан');
+            }
+        }
+
+        function addArigUs() {
+            if (!isArigUsSubscribed) {
+                agency.addObserver(arigUs);
+                isArigUsSubscribed = true;
+                updateObserverCard(arigUs, true);
+            } else {
+                console.log('Ариг Ус уже подписан');
+            }
+        }
+
+        function removeInformPolis() {
+            if (isInformPolisSubscribed) {
+                agency.removeObserver(informPolis);
+                isInformPolisSubscribed = false;
+                updateObserverCard(informPolis, false);
+            } else {
+                console.log('Информ полис не подписан');
+            }
+        }
+
+        function removeArigUs() {
+            if (isArigUsSubscribed) {
+                agency.removeObserver(arigUs);
+                isArigUsSubscribed = false;
+                updateObserverCard(arigUs, false);
+            } else {
+                console.log('Ариг Ус не подписан');
+            }
+        }
+
+        async function startReading() {
+            const startBtn = document.getElementById('startBtn');
+            
+            if (agency.observers.length === 0) {
+                console.log('⚠️ Нет подписчиков! Пожалуйста, добавьте наблюдателей перед началом чтения.');
+                return;
+            }
+
+            startBtn.disabled = true;
+            startBtn.textContent = '⏳ Обработка...';
+
+            try {
+                // Загрузка файла с сервера или использование встроенных данных
+                const response = await fetch('news_data.txt');
+                const fileContent = await response.text();
+                
+                await agency.readFromFile(fileContent);
+                
+                console.log('\n✅ Все сообщения успешно обработаны!');
+            } catch (error) {
+                console.log(`❌ Ошибка при чтении файла: ${error.message}`);
+                console.log('\n📝 Используем тестовые данные...\n');
+                
+                // Тестовые данные на случай, если файл недоступен
+                const testData = `-15 1 20; 2020-11-14; 1
+dollar 74; 2020-11-14; 2
+euro 90; 2020-11-14; 2
+Курс доллара опять растёт он стал 74;2020-11-14;3
+Сегодня солнечно, температура +5;2020-11-15;1`;
+                
+                await agency.readFromFile(testData);
+                console.log('\n✅ Тестовые данные успешно обработаны!');
+            } finally {
+                startBtn.disabled = false;
+                startBtn.textContent = '▶️ Начать чтение из файла';
+            }
+        }
+
+        function clearConsole() {
+            consoleElement.textContent = 'Консоль очищена. Ожидание действий...\n';
+        }
+
+        // Приветственное сообщение
+        console.log('='.repeat(60));
+        console.log('🎉 Добро пожаловать в систему "Ulan-Ude news"!');
+        console.log('='.repeat(60));
+        console.log('');
+        console.log('📋 Инструкции:');
+        console.log('1. Подпишите наблюдателей (Информ полис и/или Ариг Ус)');
+        console.log('2. Нажмите кнопку "Начать чтение из файла"');
+        console.log('3. Наблюдайте за обработкой сообщений с задержкой в 5 секунд');
+        console.log('');
+        console.log('💡 Типы сообщений:');
+        console.log('   1 - Информация о погоде');
+        console.log('   2 - Курс валют');
+        console.log('   3 - Новости города');
+        console.log('');
+        console.log('='.repeat(60));
+        console.log('');
+    </script>
+</body>
+</html>
