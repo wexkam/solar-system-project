@@ -1,115 +1,285 @@
 <!DOCTYPE html>
- <html lang="ru">
- <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>Планеты Солнечной системы</title>
-      <style>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulan-Ude News Agency - Observer Pattern Demo</title>
+    <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
         }
-
-        header {
-            background-color: #2d3a3f;
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background: #3498db;
             color: white;
-            text-align: center;
-            padding: 20px 0;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
         }
-
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
+        
+        button:hover {
+            background: #2980b9;
         }
-
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: center;
+        
+        button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
         }
-
-        th {
-            background-color: #4CAF50;
+        
+        .stop-btn {
+            background: #e74c3c;
+        }
+        
+        .stop-btn:hover {
+            background: #c0392b;
+        }
+        
+        .observers-section {
+            margin-bottom: 30px;
+        }
+        
+        .observer-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .observer-list {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 50px;
+        }
+        
+        .observer-item {
+            background: #3498db;
             color: white;
+            padding: 8px 12px;
+            margin: 5px;
+            border-radius: 3px;
+            display: inline-block;
         }
-
-        td img {
-            width: 100px;
-            height: auto;
+        
+        .console {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
         }
-
-        footer {
-            text-align: center;
+        
+        .status {
             padding: 10px;
-            background-color: #2d3a3f;
-            color: white;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .status.running {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        
+        .status.stopped {
+            background: #fadbd8;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
         }
     </style>
- </head>
- <body>
-     <header>
-         <h1>Планеты Солнечной системы</h1>
-     </header>
-     <table>
-         <thead>
-             <tr>
-                 <th>№</th>
-                 <th>Название</th>
-                 <th>Изображение</th>
-             </tr>
-         </thead>
-         <tbody>
-             <tr>
-                 <td>1</td>
-                 <td>Меркурий</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Mercury_in_color_-_Prockter07_centered.jpg/280px-Mercury_in_color_-_Prockter07_centered.jpg" alt="Меркурий" width="75"></td>
-             </tr>
-             <tr>
-                 <td>2</td>
-                 <td>Венера</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Venus_from_Mariner_10.jpg/280px-Venus_from_Mariner_10.jpg" alt="Венера" width="75"></td>
-             </tr>
-             <tr>
-                 <td>3</td>
-                 <td>Земля</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Africa_and_Europe_from_a_Million_Miles_Away.png/330px-Africa_and_Europe_from_a_Million_Miles_Away.png" alt="Земля" width="75"></td>
-             </tr>
-             <tr>
-                 <td>4</td>
-                 <td>Марс</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mars_Valles_Marineris_EDIT.jpg/274px-Mars_Valles_Marineris_EDIT.jpg" alt="Марс" width="75"></td>
-             </tr>
-             <tr>
-                 <td>5</td>
-                 <td>Юпитер</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg/300px-Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg" alt="Юпитер" width="75"></td>
-             </tr>
-             <tr>
-                 <td>6</td>
-                 <td>Сатурн</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Saturn_-_April_25_2016_%2837612580000%29.png/300px-Saturn_-_April_25_2016_%2837612580000%29.png" alt="Сатурн" width="75"></td>
-             </tr>
-             <tr>
-                 <td>7</td>
-                 <td>Уран</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Uranus_Voyager2_color_calibrated.png/274px-Uranus_Voyager2_color_calibrated.png" alt="Уран" width="75"></td>
-             </tr>
-             <tr>
-                 <td>8</td>
-                 <td>Нептун</td>
-                 <td><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Neptune_Voyager2_color_calibrated.png/240px-Neptune_Voyager2_color_calibrated.png" alt="Нептун" width="75"></td>
-             </tr>
-         </tbody>
-     </table>
- </body>
- <footer>
-    <small>&copy; 2025 Шойненов А.Б.</small>
- </footer>
- </html>
- </html>
+</head>
+<body>
+    <div class="container">
+        <h1>🏢 Информационное агентство "Ulan-Ude News"</h1>
+        
+        <div class="info-box">
+            <h3>📋 Описание системы</h3>
+            <p>Демонстрация паттерна Observer для информационного агентства. Система позволяет:</p>
+            <ul>
+                <li>Добавлять и удалять наблюдателей без изменения кода</li>
+                <li>Читать данные из файла с задержкой 5 секунд</li>
+                <li>Уведомлять всех подписанных наблюдателей о новых сообщениях</li>
+            </ul>
+        </div>
+        
+        <div class="status stopped" id="status">
+            Статус: Остановлено
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn" onclick="startNewsReading()">▶️ Начать чтение новостей</button>
+            <button id="stopBtn" onclick="stopNewsReading()" disabled class="stop-btn">⏹️ Остановить</button>
+            <button onclick="clearConsole()">🗑️ Очистить консоль</button>
+        </div>
+        
+        <div class="observers-section">
+            <h3>👥 Управление наблюдателями</h3>
+            <div class="observer-controls">
+                <button onclick="addInformPolis()">➕ Добавить Информ полис</button>
+                <button onclick="addArigUs()">➕ Добавить Ариг Ус</button>
+                <button onclick="removeInformPolis()">➖ Удалить Информ полис</button>
+                <button onclick="removeArigUs()">➖ Удалить Ариг Ус</button>
+            </div>
+            <div class="observer-list" id="observerList">
+                <em>Наблюдатели не добавлены</em>
+            </div>
+        </div>
+        
+        <h3>📺 Консоль вывода</h3>
+        <div class="console" id="console">
+            Готов к работе. Нажмите "Начать чтение новостей" для запуска.
+        </div>
+    </div>
+
+    <script src="observer.js"></script>
+    <script>
+        // Глобальные переменные
+        let newsAgency;
+        let newsReader;
+        let informPolisObserver;
+        let arigUsObserver;
+        let isInformPolisAdded = false;
+        let isArigUsAdded = false;
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+        });
+
+        function initializeSystem() {
+            // Создаем экземпляры
+            newsAgency = new NewsAgency();
+            newsReader = new NewsReader(newsAgency);
+            informPolisObserver = new InformPolisObserver();
+            arigUsObserver = new ArigUsObserver();
+            
+            // Перехватываем console.log для отображения в интерфейсе
+            const originalLog = console.log;
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                const consoleElement = document.getElementById('console');
+                const message = args.join(' ') + '\n';
+                consoleElement.textContent += message;
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            };
+            
+            updateObserverList();
+        }
+
+        function startNewsReading() {
+            if (newsAgency.observers.length === 0) {
+                alert('Добавьте хотя бы одного наблюдателя перед началом чтения!');
+                return;
+            }
+            
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('status').textContent = 'Статус: Чтение новостей...';
+            document.getElementById('status').className = 'status running';
+            
+            newsReader.startReading('news_data.txt');
+        }
+
+        function stopNewsReading() {
+            newsReader.stopReading();
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('status').textContent = 'Статус: Остановлено';
+            document.getElementById('status').className = 'status stopped';
+        }
+
+        function addInformPolis() {
+            if (!isInformPolisAdded) {
+                newsAgency.addObserver(informPolisObserver);
+                isInformPolisAdded = true;
+                updateObserverList();
+            }
+        }
+
+        function addArigUs() {
+            if (!isArigUsAdded) {
+                newsAgency.addObserver(arigUsObserver);
+                isArigUsAdded = true;
+                updateObserverList();
+            }
+        }
+
+        function removeInformPolis() {
+            if (isInformPolisAdded) {
+                newsAgency.removeObserver(informPolisObserver);
+                isInformPolisAdded = false;
+                updateObserverList();
+            }
+        }
+
+        function removeArigUs() {
+            if (isArigUsAdded) {
+                newsAgency.removeObserver(arigUsObserver);
+                isArigUsAdded = false;
+                updateObserverList();
+            }
+        }
+
+        function updateObserverList() {
+            const observerList = document.getElementById('observerList');
+            if (newsAgency.observers.length === 0) {
+                observerList.innerHTML = '<em>Наблюдатели не добавлены</em>';
+            } else {
+                observerList.innerHTML = newsAgency.observers.map(obs => 
+                    `<span class="observer-item">${obs.name}</span>`
+                ).join('');
+            }
+        }
+
+        function clearConsole() {
+            document.getElementById('console').textContent = '';
+        }
+    </script>
+</body>
+</html>
